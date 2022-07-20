@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os.path
 from pathlib import Path
+# import django_heroku
+#
+# django_heroku.settings(locals())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +24,7 @@ MEDIA_URL = '/media/'
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4zhlyu&3x*+c_ggyzu7htw998#oq4cp2%inf2nipvjfi-fkbmz'
+# SECRET_KEY = 'django-insecure-4zhlyu&3x*+c_ggyzu7htw998#oq4cp2%inf2nipvjfi-fkbmz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
