@@ -1,0 +1,388 @@
+{% extends 'userDetailsNav.html' %}
+
+{% block content %}
+<form class="row g-3 needs-validation" action="save_user" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="col-md-6">
+        <label for="inputFirstName" class="form-label">First Name</label>
+        <input type="text" class="form-control" id="inputFirstName" name="first_name">
+    </div>
+    <div class="col-md-6">
+        <label for="inputLastName" class="form-label">Last Name</label>
+        <input type="text" class="form-control" id="inputLastName" name="last_name">
+    </div>
+    <div class="col-6">
+        <label for="inputPhoneNumber" class="form-label">Phone Number</label>
+        <input type="text" class="form-control" id="inputPhoneNumber" value={{phone_number}} name="phone_number" disabled>
+    </div>
+    <div class="col-6">
+        <label for="inputModeOfTransport" class="form-label">Mode of Transport</label>
+        <select id="inputModeOfTransport" class="form-select" name="mode_of_transport">
+            <option value="Bike" selected>Bike</option>
+            <option value="Car">Car</option>
+            <option value="Train">Train</option>
+            <option value="Flight">Flight</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label for="inputAge" class="form-label">Age</label>
+        <input type="number" class="form-control" id="inputAge" name="age">
+    </div>
+    <div class="col-md-6">
+        <label for="inputNoOfPersons" class="form-label">No Of Persons</label>
+        <input type="number" class="form-control" id="inputNoOfPersons" name="no_of_persons">
+    </div>
+    <div class="col-md-6">
+        <label for="inputFromAddress" class="form-label">From</label>
+        <input type="text" class="form-control" id="inputFromAddress" name="from_address"
+               placeholder="Apartment, studio, or floor">
+    </div>
+
+    <div class="col-md-2">
+        <label for="inputFromState" class="form-label">State</label>
+        <select id="inputFromState" class="form-select" name="from_state">
+            <option value="" selected>--Select--</option>
+            {% for state in states%}
+            <option value="{{ state }}">{{ state }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-2">
+        <label for="inputFromCity" class="form-label">City</label>
+        <select id="inputFromCity" class="form-select" name="from_city" disabled="true">
+            <option value="" selected>--Select--</option>
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <label for="inputFromZip" class="form-label">Zip</label>
+        <input type="number" class="form-control" id="inputFromZip" name="from_zip">
+    </div>
+
+    <div class="col-md-6">
+        <label for="inputToAddress" class="form-label">To</label>
+        <input type="text" class="form-control" id="inputToAddress" name="to_address"
+               placeholder="Apartment, studio, or floor">
+    </div>
+    <!--  <div class="col-6">-->
+    <!--    <label for="inputAddress" class="form-label">Address</label>-->
+    <!--    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">-->
+    <!--  </div>-->
+    <!-- To address -->
+    <div class="col-md-2">
+        <label for="inputToState" class="form-label">State</label>
+        <select id="inputToState" class="form-select" name="to_state">
+            <option value="" selected>--Select--</option>
+            {% for state in states%}
+            <option value="{{ state }}">{{ state }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-2">
+        <label for="inputToCity" class="form-label">City</label>
+        <select id="inputToCity" class="form-select" name="to_city" disabled="true">
+            <option value="" selected>--Select--</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label for="inputToZip" class="form-label">Zip</label>
+        <input type="number" class="form-control" id="inputToZip" name="to_zip">
+    </div>
+
+    <div class="col-md-6">
+        <label for="inputReason" class="form-label">Reason</label>
+        <input type="text" class="form-control" id="inputReason" name="reason">
+    </div>
+    <!--  <div class="col-md-6">-->
+    <!--  </div>-->
+
+    <div class="col-md-2">
+        <br/>
+<!--        <label for="inputBrowse" class="form-label">Aadhar Card: </label>-->
+<!--        <input type="button" class="btn btn-secondary btn-sm" id="inputBrowse" value="Browse">-->
+        <div class="mb-3">
+          <label for="formFileSm" class="form-label">Aadhar Card:</label>
+          <input class="form-control form-control-sm" id="formFileSm" type="file" name="aadhar_img">
+        </div>
+    </div>
+    <div class="col-4">
+        <br/>
+        <label class="form-label">Covid Positive: </label>
+        <input type="radio" id="covidPositive" class="form-check-label" name="covid_status" value="Yes"> Yes
+        <input type="radio" id="NonCovidPositive" class="form-check-label" name="covid_status" value="No" checked> No
+    </div>
+
+    <div class="col-12 d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+<fieldset style="padding-top:60px;margin-left:-50px;margin-right:-50px;">
+    <legend style="font-weight:bold">Submitted Request Details:</legend>
+    <div class="form-group row" style="padding-top: 5px;padding-bottom: 10px;">
+        <div class="col-sm-2" style="margin-right: -110px; padding-left: 20px;">
+        <label class="form-label" for="maxRows" style="">No of Records: </label>
+        </div>
+        <div class="col-sm-2">
+        <select class="form-select" style="width:40%" name="state" id="maxRows">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="30">40</option>
+		</select>
+        </div>
+    </div>
+    <div class="table-responsive">
+    <table class="table table-striped table-bordered table-sm"
+           style="width:100%;margin-left:2px%;border:1px grey;font-size:12px;" id="details_table">
+        <thead>
+        <tr>
+<!--            <th scope="col">Id</th>-->
+            <th scope="col">Name</th>
+            <th scope="col">Mode of Transport</th>
+            <th scope="col">Age</th>
+            <th scope="col">No of Persons</th>
+            <th scope="col">From Address</th>
+            <th scope="col">To Address</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Reason</th>
+            <th scope="col">Covid Status</th>
+            <th scope="col">Submitted On</th>
+            <th scope="col">Status</th>
+            <th scope="col">Reject Reason</th>
+            <th scope="col">Approved/Rejected On</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for req in submitted_requests %}
+        <tr>
+<!--            <td>{{ req.pk }}</td>-->
+            <td style="width:10%;">{{ req.first_name }} {{ req.last_name }}</td>
+            <td style="width:5%;">{{ req.mode_of_transport }}</td>
+            <td style="width:2%;">{{ req.age }}</td>
+            <td style="width:2%;">{{ req.no_of_persons }}</td>
+            <td style="width:15%;">{{ req.from_address }}, {{ req.from_city }}, {{ req.from_state}} - {{ req.from_zip }}</td>
+            <td style="width:15%;">{{ req.to_address }}, {{ req.to_city }}, {{ req.to_state}} - {{ req.to_zip }}</td>
+            <td style="width:10%;">{{ req.phone_number }}</td>
+            <td style="width:15%;">{{ req.reason }}</td>
+            <td style="width:1%;">{{ req.covid_status }}</td>
+            <td style="width:10%;">{{ req.submitted_date|date:"M d, Y h:i a" }}</td>
+            <td style="width:5%;">{{ req.approval_status }}</td>
+            <td style="width:10%;">{{ req.reject_reason }}</td>
+            <td style="width:15%;">{{ req.approved_date|date:"M d, Y h:i a" }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+       <!--		Start Pagination -->
+			<div class='pagination-container' style="float: right;">
+				<nav>
+				  <ul class="pagination">
+
+            <li data-page="prev" class="page-item" >
+								     <span class="page-link"> < </span>
+								    </li>
+				   <!--	Here the JS Function Will Add the Rows -->
+        <li data-page="next" id="prev" class="page-item">
+								       <span class="page-link"> > </span>
+								    </li>
+				  </ul>
+				</nav>
+			</div>
+    </div>
+</fieldset>
+
+<style>
+
+table th , table td{
+    text-align: center;
+}
+.pagination li:hover{
+    cursor: pointer;
+}
+table tbody tr {
+	display: none;
+}
+
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+<!--        $('#details_table').DataTable();-->
+        getPagination('#details_table');
+        $('.dataTables_length').addClass('bs-select');
+    })
+  $(document).on("change", "#inputFromState", function() {
+    loadCities($('#inputFromState').val(), '#inputFromCity');
+  });
+
+  $(document).on("change", "#inputToState", function() {
+    loadCities($('#inputToState').val(), '#inputToCity');
+  });
+ function loadCities(val, id){
+  if(val != -1) {
+    $.ajax({
+      type:'POST',
+      url:'get_cities',
+      data:{
+        selVal:val,
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(data){
+        $(id).removeAttr('disabled');
+        var cities = JSON.parse(data);
+        var html = '<option value="" selected>--Select--</option>';
+        for(var i=0;i<cities.length;i++) {
+          html += '<option value="'+cities[i]+'">'+cities[i]+'</option>'
+        }
+        $(id).html(html);
+      }
+    });
+    } else {
+      $(id).attr('disabled', 'true');
+      $(id).html('<option value="" selected>--Select--</option>');
+    }
+  }
+
+
+function getPagination(table) {
+  var lastPage = 1;
+
+  $('#maxRows')
+    .on('change', function(evt) {
+      //$('.paginationprev').html('');						// reset pagination
+
+     lastPage = 1;
+      $('.pagination')
+        .find('li')
+        .slice(1, -1)
+        .remove();
+      var trnum = 0; // reset tr counter
+      var maxRows = parseInt($(this).val()); // get Max Rows from select option
+
+      if (maxRows == 5000) {
+        $('.pagination').hide();
+      } else {
+        $('.pagination').show();
+      }
+
+      var totalRows = $(table + ' tbody tr').length; // numbers of rows
+      $(table + ' tr:gt(0)').each(function() {
+        // each TR in  table and not the header
+        trnum++; // Start Counter
+        if (trnum > maxRows) {
+          // if tr number gt maxRows
+
+          $(this).hide(); // fade it out
+        }
+        if (trnum <= maxRows) {
+          $(this).show();
+        } // else fade in Important in case if it ..
+      }); //  was fade out to fade it in
+      if (totalRows > maxRows) {
+        // if tr total rows gt max rows option
+        var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+        //	numbers of pages
+        for (var i = 1; i <= pagenum; ) {
+          // for each page append pagination li
+          $('.pagination #prev')
+            .before(
+              '<li class="page-item" data-page="' +
+                i +
+                '">\
+								  <span class="page-link">' +
+                i++ +
+                '</span>\
+								</li>'
+            )
+            .show();
+        } // end for i
+      } // end if row count > max rows
+      $('.pagination [data-page="1"]').addClass('active'); // add active class to the first li
+      $('.pagination li').on('click', function(evt) {
+        // on click each page
+        evt.stopImmediatePropagation();
+        evt.preventDefault();
+        var pageNum = $(this).attr('data-page'); // get it's number
+
+        var maxRows = parseInt($('#maxRows').val()); // get Max Rows from select option
+
+        if (pageNum == 'prev') {
+          if (lastPage == 1) {
+            return;
+          }
+          pageNum = --lastPage;
+        }
+        if (pageNum == 'next') {
+          if (lastPage == $('.pagination li').length - 2) {
+            return;
+          }
+          pageNum = ++lastPage;
+        }
+
+        lastPage = pageNum;
+        var trIndex = 0; // reset tr counter
+        $('.pagination li').removeClass('active'); // remove active class from all li
+        $('.pagination [data-page="' + lastPage + '"]').addClass('active'); // add active class to the clicked
+        // $(this).addClass('active');					// add active class to the clicked
+	  	limitPagging();
+        $(table + ' tr:gt(0)').each(function() {
+          // each tr in table not the header
+          trIndex++; // tr index counter
+          // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+          if (
+            trIndex > maxRows * pageNum ||
+            trIndex <= maxRows * pageNum - maxRows
+          ) {
+            $(this).hide();
+          } else {
+            $(this).show();
+          } //else fade in
+        }); // end of for each tr in table
+      }); // end of on click pagination list
+	  limitPagging();
+    })
+    .val(5)
+    .change();
+
+  // end of on select change
+
+  // END OF PAGINATION
+}
+
+function limitPagging(){
+	// alert($('.pagination li').length)
+
+	if($('.pagination li').length > 7 ){
+			if( $('.pagination li.active').attr('data-page') <= 3 ){
+			$('.pagination li:gt(5)').hide();
+			$('.pagination li:lt(5)').show();
+			$('.pagination [data-page="next"]').show();
+		}if ($('.pagination li.active').attr('data-page') > 3){
+			$('.pagination li:gt(0)').hide();
+			$('.pagination [data-page="next"]').show();
+			for( let i = ( parseInt($('.pagination li.active').attr('data-page'))  -2 )  ; i <= ( parseInt($('.pagination li.active').attr('data-page'))  + 2 ) ; i++ ){
+				$('.pagination [data-page="'+i+'"]').show();
+
+			}
+
+		}
+	}
+}
+
+$(function() {
+  // Just to append id number for each row
+  $('table tr:eq(0)').prepend('<th> S.no </th>');
+
+  var id = 0;
+
+  $('table tr:gt(0)').each(function() {
+    id++;
+    $(this).prepend('<td>' + id + '</td>');
+  });
+});
+</script>
+
+{% endblock %}
+
+

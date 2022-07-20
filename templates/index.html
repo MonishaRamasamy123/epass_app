@@ -1,0 +1,140 @@
+{% extends 'loginNav.html' %}
+
+
+{% block content %}
+<div class="" style="padding-left: 20%;padding-top: 10%;">
+    <form accept="#">
+        {% csrf_token %}
+        <div class="form-group row">
+            <span id="errMsgSpan" style="color:red"></span>
+        </div>
+        <div class="form-group row">
+            <label for="phone_number" class="col-sm-2 col-form-label">Phone Number</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="+91" required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="otp" class="col-sm-2 col-form-label">OTP</label>
+            <div class="col-sm-5" id="otpField">
+                <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" disabled>
+            </div>
+            <div id="resendOtp" class="col-sm-4">
+                <span id="otpStatus" style="color:green">OTP Sent Successfully. </span><a id="otpResend" href="#">Resend OTP</a>
+            </div>
+        </div>
+        <div class="row" style="text-align:right">
+            <div id="recaptcha-container"></div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-8" id="otpsubmitDiv" style="justify-content: center;display: flex;padding-top:15px">
+                <button type="submit" id="otpSubmit" class="btn btn-primary">Send OTP</button>
+                <button type="submit" id="verifyOtp" class="btn btn-primary">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-analytics.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
+<script type="text/javascript">
+var firebaseConfig = {
+          "apiKey": "AIzaSyBaY0_EXn3iaMuxxoOLiFqTiOJt4r9urNY",
+          "authDomain": "epass-e8f1c.firebaseapp.com",
+          "databaseURL": "https://epass-e8f1c-default-rtdb.asia-southeast1.firebasedatabase.app",
+          "projectId": "epass-e8f1c",
+          "storageBucket": "epass-e8f1c.appspot.com",
+          "messagingSenderId": "901085096872",
+          "appId": "1:901085096872:web:2e83e7363954735ce24b9d",
+          "measurementId": "G-T8EK8P211Z"
+    };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+$(document).ready(function() {
+     $('#resendOtp').hide();
+     $('#verifyOtp').hide();
+     $('#otpSubmit').show();
+     $('#errMsgSpan').html('');
+});
+$('#otpSubmit,#otpResend').click(function(e){
+e.preventDefault();
+if($('#phone_number').val().length>0){
+$('#errMsgSpan').html('');
+if(window.recaptchaVerifier==undefined){
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        'size': 'normal',
+        'callback': function(response) {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+            $('#recaptcha-container').hide();
+        },
+        'expired-callback': function() {
+            // Response expired. Ask user to solve reCAPTCHA again.
+            console.log("inside expired callback");
+        }
+        });
+        } else {
+            $('#recaptcha-container').show();
+        }
+
+        var cverify=window.recaptchaVerifier;
+        firebase.auth().signInWithPhoneNumber('+91'+$('#phone_number').val(),cverify).then(function(response){
+            $('#otp').removeAttr('disabled');
+            $('#otp').attr('required','required');
+            $('#resendOtp').show();
+            $('#verifyOtp').show();
+            $('#otpSubmit').hide();
+            $('#otpStatus').html('OTP Sent Successfully.');
+            $('#otpStatus').css('color','green');
+            window.confirmationResult=response;
+        }).catch(function(error){
+            console.log(error);
+        })
+        }else{
+            $('#errMsgSpan').html('Please Enter Phone Number');
+        }
+   });
+
+   $('#verifyOtp').click(function(e) {
+   e.preventDefault();
+       confirmationResult.confirm($('#otp').val()).then(function(response){
+           login();
+       })
+       .catch(function(error){
+           if(error.code=='auth/code-expired') {
+            $('#otpStatus').html('OTP expired.');
+            $('#otpStatus').css('color','red');
+           } else {
+            $('#otpStatus').html('Incorrect OTP.');
+            $('#otpStatus').css('color','red');
+           }
+
+       })
+   });
+    function login() {
+        $.ajax({
+            type:'POST',
+            url:'userForm',
+            data:{
+            phone_number:$('#phone_number').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function(data){
+        window.location.replace("http://127.0.0.1:8000/epassLogin/userDetailForm");
+        }
+        });
+
+    }
+
+</script>
+<style>
+    .form-group {
+        padding-bottom: 10px;
+    }
+
+</style>
+{% endblock %}
