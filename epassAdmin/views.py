@@ -9,7 +9,6 @@ import datetime
 import requests
 from rest_framework.response import Response
 import json
-import jwt
 # from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import AuthenticationFailed

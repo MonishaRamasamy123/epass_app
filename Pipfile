@@ -10,6 +10,9 @@ pillow = "*"
 pyrebase4 = "*"
 requests = "*"
 git42 = "*"
+djangorestframework = "*"
+jwt = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
