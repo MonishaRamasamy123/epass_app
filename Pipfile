@@ -13,6 +13,7 @@ git42 = "*"
 djangorestframework = "*"
 jwt = "*"
 django-cors-headers = "*"
+gunicorn = "*"
 
 [dev-packages]
 
