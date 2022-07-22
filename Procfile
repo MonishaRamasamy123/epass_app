@@ -1,1 +1,1 @@
-web: gunicorn epassApp.wsgi:application --log-file - --log-level debug
+web: gunicorn epassapp.wsgi:application --log-file - --log-level debug
